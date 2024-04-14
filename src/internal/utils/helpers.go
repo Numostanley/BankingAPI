@@ -2,9 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"time"
@@ -53,9 +51,7 @@ func CloseFile(file *os.File) {
 	}
 }
 
-func SeedAccount() {
-	filename := "extras/accounts.json"
-
+func SeedAccount(filename string) {
 	file, err := OpenFile(filename)
 	if err != nil {
 		log.Println("Error:", err)
@@ -90,12 +86,13 @@ func SeedAccount() {
 func MockThirdPartyAPI() (bool, error) {
 	time.Sleep(time.Second * 3)
 
-	rand.New(rand.NewSource(time.Now().UnixNano()))
-	result := rand.Intn(2)
+	// rand.New(rand.NewSource(time.Now().UnixNano()))
+	// result := rand.Intn(2)
 
-	if result == 0 {
-		return true, nil
-	} else {
-		return false, fmt.Errorf("third-party API request failed")
-	}
+	// if result == 0 {
+	// 	return true, nil
+	// } else {
+	// 	return false, fmt.Errorf("third-party API request failed")
+	// }
+	return true, nil
 }

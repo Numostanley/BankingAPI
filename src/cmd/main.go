@@ -15,7 +15,7 @@ func main() {
 	enV.LoadEnv()
 
 	db.InitDB()
-	utils.SeedAccount()
+	utils.SeedAccount("extras/accounts.json")
 
 	mainRouter := routers.GetRoutes()
 
