@@ -1,0 +1,23 @@
+[
+    {
+      "first_name": "Jon",
+      "last_name": "Doe",
+      "email": "johndoe@email.com",
+      "phone_number": "08102004000",
+      "balance": 5000
+    },
+    {
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "email": "janedoe@email.com",
+      "phone_number": "08106009000",
+      "balance": 5000
+    },
+    {
+      "first_name": "Jake",
+      "last_name": "Doe",
+      "email": "jakedoe@email.com",
+      "phone_number": "08113007000",
+      "balance": 5000
+    }
+]
