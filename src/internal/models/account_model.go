@@ -101,13 +101,3 @@ func GetAccountByID(userID uuid.UUID, db *gorm.DB) (*Account, error) {
 	}
 	return &user, nil
 }
-
-func GetAccountByEmail(email string, db *gorm.DB) (*Account, error) {
-	user := Account{Email: email}
-	fetchedUser := db.Where("email = ?", email).First(&user)
-
-	if fetchedUser.Error != nil {
-		return nil, fmt.Errorf("error returning user %s", fetchedUser.Error)
-	}
-	return &user, nil
-}

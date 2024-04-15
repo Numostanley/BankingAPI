@@ -23,7 +23,10 @@ func TestTransactionHandlers(t *testing.T) {
 	defer func() {
 		db.Database.DB = nil
 		if sqlDB, err := testDB.DB(); err == nil {
-			sqlDB.Close()
+			err := sqlDB.Close()
+			if err != nil {
+				return
+			}
 		}
 	}()
 

@@ -34,11 +34,11 @@ func (l *CustomLogger) Trace(_ context.Context, begin time.Time, fc func() (stri
 	}
 }
 
-type DBInstance struct {
+type Instance struct {
 	DB *gorm.DB
 }
 
-var Database DBInstance
+var Database Instance
 
 func InitDB() {
 	enV := env.GetEnv{}
@@ -70,7 +70,7 @@ func InitDB() {
 	}
 	log.Println("Migrations Complete")
 
-	Database = DBInstance{
+	Database = Instance{
 		DB: db,
 	}
 }
