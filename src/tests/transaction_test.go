@@ -13,6 +13,7 @@ import (
 	"github.com/Numostanley/BankingAPI/internal/handlers"
 	"github.com/Numostanley/BankingAPI/internal/models"
 	"github.com/Numostanley/BankingAPI/internal/utils"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -42,7 +43,6 @@ func TestTransactionHandlers(t *testing.T) {
 
 	rr1 := httptest.NewRecorder()
 	handlers.CreateTransactionHandler(rr1, req1)
-	// log.Println(rr1.Body)
 	if status := rr1.Code; status != http.StatusOK {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
 	}
@@ -57,6 +57,7 @@ func TestTransactionHandlers(t *testing.T) {
 			t.Errorf("response missing expected key: %s", key)
 		}
 	}
+	assert.Equal(t, "Transaction created successfully", response1["message"])
 
 	// Test for duplicate transaction reference
 	requestBody2 := []byte(fmt.Sprintf(`{"account_id": "%s", "reference": "ref123", "amount": 100.0}`, accountID))
@@ -70,6 +71,12 @@ func TestTransactionHandlers(t *testing.T) {
 	if status := rr2.Code; status != http.StatusBadRequest {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusBadRequest)
 	}
+
+	var response2 map[string]interface{}
+	if err := json.Unmarshal(rr2.Body.Bytes(), &response2); err != nil {
+		t.Errorf("error parsing response body: %v", err)
+	}
+	assert.Equal(t, "Error creating transaction: transaction with this reference already exists", response2["error"])
 
 	// Test GetTransactionHandler
 	req3, err := http.NewRequest("GET", "/v1/payments/ref123", nil)
@@ -107,6 +114,12 @@ func TestTransactionHandlers(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusBadRequest)
 	}
 
+	var response4 map[string]interface{}
+	if err := json.Unmarshal(rr4.Body.Bytes(), &response4); err != nil {
+		t.Errorf("error parsing response body: %v", err)
+	}
+	assert.Equal(t, "Insfficient account balance!!!", response4["error"])
+
 	// Test for invalid transaction reference
 	req5, err := http.NewRequest("GET", "/v1/payments/ref12398", nil)
 	if err != nil {
@@ -118,6 +131,12 @@ func TestTransactionHandlers(t *testing.T) {
 	if status := rr5.Code; status != http.StatusBadRequest {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusBadRequest)
 	}
+
+	var response5 map[string]interface{}
+	if err := json.Unmarshal(rr5.Body.Bytes(), &response5); err != nil {
+		t.Errorf("error parsing response body: %v", err)
+	}
+	assert.Equal(t, "Error retreiving transaction: record not found", response5["error"])
 
 }
 
